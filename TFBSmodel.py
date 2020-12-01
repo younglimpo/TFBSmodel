@@ -46,44 +46,44 @@ BS = 16
 #     custom metrics v1.0
 # +++++++++++++++++++++++++++++++++++++++++++
 def recall(y_true, y_pred): # producer accuracy
-     TP = K.sum(y_true * K.round(y_pred))
-     recall = TP / (K.sum(y_true) + K.epsilon()) # equivalent to the above two lines of code
+     TP = K.sum(K.cast(y_true * K.round(y_pred), 'float'))
+     recall = TP / (K.sum(K.cast(y_true, 'float')) + K.epsilon()) # equivalent to the above two lines of code
      return recall
 
-def precision(y_true, y_pred): #user accuracy
-    TP = K.sum(y_true * K.round(y_pred))
-    precision = TP / (K.sum(K.round(y_pred))+ K.epsilon()) # equivalent to the above two lines of code
+def precision(y_true, y_pred):  # user accuracy
+    TP = K.sum(K.cast(y_true * K.round(y_pred),'float'))
+    precision = TP / (K.sum(K.cast(K.round(y_pred),'float')) + K.epsilon())  # equivalent to the above two lines of code
     return precision
 
 
 def fmeasure(y_true, y_pred):
     # Calculates the f-measure, the harmonic mean of precision and recall.
-    TP = K.sum(y_true * K.round(y_pred))
-    precision = TP / (K.sum(K.round(y_pred))+ K.epsilon())
-    recall = TP / (K.sum(K.round(y_true))+ K.epsilon())
-    F1score = 2 * precision * recall / (precision + recall+K.epsilon())
+    TP = K.sum(K.cast(y_true * K.round(y_pred), 'float'))
+    precision = TP / (K.sum(K.cast(K.round(y_pred), 'float')) + K.epsilon())
+    recall = TP / (K.sum(K.cast(K.round(y_true), 'float')) + K.epsilon())
+    F1score = 2 * precision * recall / (precision + recall + K.epsilon())
     return F1score
 
 def kappa_metrics(y_true, y_pred):
     # Calculates the kappa coefficient
-    TP = K.sum(y_true * K.round(y_pred))
-    FP = K.sum((1 - y_true) * K.round(y_pred))
-    FN = K.sum(y_true * (1 - K.round(y_pred)))
-    TN = K.sum((1 - y_true) * (1 - K.round(y_pred)))
-    totalnum=TP+FP+FN+TN
-    p0 = (TP + TN)/ totalnum
-    pe = ((TP + FP) * (TP + FN) + (FN + TN) * (FP + TN))/ (totalnum * totalnum)
-    kappa_coef = (p0 - pe)/(1 - pe + K.epsilon())
+    TP = K.sum(K.cast(y_true * K.round(y_pred), 'float')) + K.epsilon()
+    FP = K.sum(K.cast((1 - y_true) * K.round(y_pred), 'float')) + K.epsilon()
+    FN = K.sum(K.cast(y_true * (1 - K.round(y_pred)), 'float')) + K.epsilon()
+    TN = K.sum(K.cast((1 - y_true) * (1 - K.round(y_pred)), 'float')) + K.epsilon()
+    totalnum = TP + FP + FN + TN
+    p0 = (TP + TN) / (totalnum + K.epsilon())
+    pe = ((TP + FP) * (TP + FN) + (FN + TN) * (FP + TN)) / (totalnum * totalnum + K.epsilon())
+    kappa_coef = (p0 - pe) / (1 - pe + K.epsilon())
     return kappa_coef
 
 
-def OA(y_true, y_pred):  # producer accuracy
-    TP = K.sum(y_true * K.round(y_pred))
-    FP = K.sum((1 - y_true) * K.round(y_pred))
-    FN = K.sum(y_true * (1 - K.round(y_pred)))
-    TN = K.sum((1 - y_true) * (1 - K.round(y_pred)))
+def OA(y_true, y_pred):
+    TP = K.sum(K.cast(y_true * K.round(y_pred), 'float'))
+    FP = K.sum(K.cast((1 - y_true) * K.round(y_pred), 'float'))
+    FN = K.sum(K.cast(y_true * (1 - K.round(y_pred)), 'float'))
+    TN = K.sum(K.cast((1 - y_true) * (1 - K.round(y_pred)), 'float'))
     totalnum = TP + FP + FN + TN
-    overallAC=(TP+TN)/totalnum
+    overallAC = (TP + TN) / (totalnum + K.epsilon())
     return overallAC
 
 # +++++++++++++++++++++++++++++++++++++++++++
