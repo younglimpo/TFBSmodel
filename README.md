@@ -26,6 +26,9 @@ https://drive.google.com/drive/folders/1AamMFxCTl0f2SwcptdugYUy3wOa0lZqC?usp=sha
 
 The dataset is generated from time-series Sentinel-1 SAR images in 2019 in AR,MS, MO, TN of the United States, and Cropland Data Layer (CDL) is used as the label data.
 
+The time-series Sentinel-1 SAR images is preprocessed and downloaded by Google Earth Engine and the linke of the code can be found below:
+https://code.earthengine.google.com/49f8e2532075272a79883ad8fbf41ccb
+
 Download two compressed files named 'src' and 'label' to your local computer and unzip them to the same directory.
 ![Image text](https://github.com/younglimpo/TFBSmodel/blob/master/Img/dataset.png)
 
